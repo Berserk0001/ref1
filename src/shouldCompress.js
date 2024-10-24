@@ -1,9 +1,9 @@
 "use strict";
-const MIN_COMPRESS_LENGTH = 1024
-const MIN_TRANSPARENT_COMPRESS_LENGTH = MIN_COMPRESS_LENGTH * 100
+const MIN_COMPRESS_LENGTH = 1024;
+const MIN_TRANSPARENT_COMPRESS_LENGTH = MIN_COMPRESS_LENGTH * 100;
 
 function shouldCompress(req) {
-  const { originType, originSize, webp } = req.params
+  const { originType, originSize, webp } = req.params;
 
   if (!originType.startsWith('image')) return false;
   if (originSize === 0) return false;
@@ -20,4 +20,4 @@ function shouldCompress(req) {
   return true;
 }
 
-module.exports = shouldCompress
+module.exports = shouldCompress;

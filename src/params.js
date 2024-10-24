@@ -7,7 +7,7 @@ function params(req, res, next) {
   if (!url) return res.send('bandwidth-hero-proxy');
   // If the URL starts with 'http:', change it to 'https:'
   if (url && url.startsWith('http:')) {
-    req.query.url = url.replace('http:', 'https:');
+    url = url.replace('http:', 'https:');
   }
   req.params.url = decodeURIComponent(url);
   req.params.webp = !req.query.jpeg

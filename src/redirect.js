@@ -11,4 +11,4 @@ function redirect(req, res) {
   res.status(302).end();
 }
 
-module.exports = redirect
+module.exports = redirect;

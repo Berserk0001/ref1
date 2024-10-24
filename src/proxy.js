@@ -21,7 +21,8 @@ async function proxy(req, res) {
   )
     return redirect(req, res);
   try {
-    let origin = await undici.request(req.params.url, {
+    let origin = await undici.request(req.params.url, 
+      {
       headers: {
         ...pick(req.headers, ["cookie", "dnt", "referer", "range"]),
         "user-agent": "Bandwidth-Hero Compressor",

@@ -1,6 +1,17 @@
 "use strict";
 const DEFAULT_QUALITY = 40
 
+function enforceHTTPS(req, res, next) {
+  let url = req.query.url;
+
+  // If the URL starts with 'http:', change it to 'https:'
+  if (url && url.startsWith('http:')) {
+    req.query.url = url.replace('http:', 'https:');
+  }
+
+  next();
+}
+
 function params(req, res, next) {
   let url = req.query.url;
   if (!url) return res.send('bandwidth-hero-proxy');

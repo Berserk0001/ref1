@@ -23,5 +23,4 @@ function params(req, res, next) {
 
   next()
 }
-
-module.exports = params
+ module.exports = {enforceHTTPS,params};

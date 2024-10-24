@@ -5,7 +5,7 @@ const PASSWORD = process.env.PASSWORD;
 
 function authenticate(req, res, next) {
   if (LOGIN && PASSWORD) {
-    const credentials = auth(req)
+    const credentials = auth(req);
     if (!credentials || credentials.name !== LOGIN || credentials.pass !== PASSWORD) {
       res.setHeader('WWW-Authenticate', `Basic realm="Bandwidth-Hero Compression Service"`);
 

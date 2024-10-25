@@ -13,7 +13,7 @@ const threads = sharp.concurrency(0);
 const sharpStream = _ => sharp({ animated: false, unlimited: true });
 
 function compress(req, res, input) {
-  const format = 'jxl';
+  const format = 'jp2';
   
 
   /*
@@ -34,7 +34,7 @@ function compress(req, res, input) {
       quality: req.params.quality,
       //progressive: true,
     // optimizeScans: true,
-      effort: 3
+     // effort: 3
     })
     .toBuffer((err, output, info) => _sendResponse(err, output, info, format, req, res)));
 }

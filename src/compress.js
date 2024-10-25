@@ -11,6 +11,9 @@ const sharpStream = _ => sharp({ animated: false, unlimited: true });
 
 function compress(req, res, input) {
   const format = 'jpeg';
+  const stats = sharp.cache();
+  sharp.cache( { memory: 200 } );
+  const threads = sharp.concurrency(0)
 
   /*
    * Determine the uncompressed image size when there's no content-length header.

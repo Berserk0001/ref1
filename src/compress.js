@@ -7,14 +7,10 @@
 const sharp = require('sharp');
 const redirect = require('./redirect');
 
-const stats = sharp.cache();
-sharp.cache(false);
-  const threads = sharp.concurrency(1)
-
 const sharpStream = _ => sharp({ animated: false, unlimited: true });
 
 function compress(req, res, input) {
-  const format = 'jpeg';
+  const format = req.params.webp ? 'webp' : 'jpeg'
   
 
   /*

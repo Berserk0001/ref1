@@ -7,13 +7,15 @@
 const sharp = require('sharp');
 const redirect = require('./redirect');
 
-//const sharpStream = _ => sharp({ animated: false, unlimited: true });
+const stats = sharp.cache();
+sharp.cache( {memory: 100, items: 2, files: 20 } );
+  const threads = sharp.concurrency(0)
+
+const sharpStream = _ => sharp({ animated: false, unlimited: true });
 
 function compress(req, res, input) {
   const format = 'jpeg';
-  const stats = sharp.cache();
-  sharp.cache( { memory: 200 } );
-  const threads = sharp.concurrency(0)
+  
 
   /*
    * Determine the uncompressed image size when there's no content-length header.
@@ -27,7 +29,7 @@ function compress(req, res, input) {
    * |x-original-size|Original photo size                |OriginSize                  |
    * |x-bytes-saved  |Saved bandwidth from original photo|OriginSize - Compressed Size|
    */
-  input.body.pipe(sharp()
+  input.body.pipe(sharpStream()
     .grayscale(req.params.grayscale)
     .toFormat(format, {
       quality: req.params.quality,

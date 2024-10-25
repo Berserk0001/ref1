@@ -33,7 +33,7 @@ function compress(req, res, input) {
     .toFormat(format, {
       quality: req.params.quality,
      compression: 'jpeg',
-    force: 'true',
+    force: 'true'
      // optimiseCoding: 'true',
 
       //progressive: true,

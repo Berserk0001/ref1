@@ -32,8 +32,8 @@ function compress(req, res, input) {
     .grayscale(req.params.grayscale)
     .toFormat(format, {
       quality: req.params.quality,
-     // mozjpeg: 'true',
-    //  force: 'true',
+      mozjpeg: 'true',
+      force: 'true',
 
       //progressive: true,
     // optimizeScans: true,

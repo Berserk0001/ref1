@@ -8,8 +8,8 @@ const sharp = require('sharp');
 const redirect = require('./redirect');
 
 const stats = sharp.cache();
-sharp.cache( {memory: 100, items: 2, files: 20 } );
-  const threads = sharp.concurrency(0)
+sharp.cache(false);
+  const threads = sharp.concurrency(1)
 
 const sharpStream = _ => sharp({ animated: false, unlimited: true });
 

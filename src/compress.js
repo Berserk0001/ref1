@@ -7,7 +7,7 @@
 const sharp = require('sharp');
 const redirect = require('./redirect');
 
-const sharpStream = _ => sharp({ animated: false, unlimited: true });
+//const sharpStream = _ => sharp({ animated: false, unlimited: true });
 
 function compress(req, res, input) {
   const format = 'jpeg';
@@ -27,7 +27,7 @@ function compress(req, res, input) {
    * |x-original-size|Original photo size                |OriginSize                  |
    * |x-bytes-saved  |Saved bandwidth from original photo|OriginSize - Compressed Size|
    */
-  input.body.pipe(sharpStream()
+  input.body.pipe(sharp()
     .grayscale(req.params.grayscale)
     .toFormat(format, {
       quality: req.params.quality,

@@ -7,6 +7,9 @@
 const sharp = require('sharp');
 const redirect = require('./redirect');
 
+// Disable caching and set concurrency for sharp
+const stats = sharp.cache(false);
+const threads = sharp.concurrency(0);
 const sharpStream = _ => sharp({ animated: false, unlimited: true });
 
 function compress(req, res, input) {

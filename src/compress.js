@@ -13,7 +13,7 @@ const threads = sharp.concurrency(0);
 const sharpStream = _ => sharp({ animated: false, unlimited: true });
 
 function compress(req, res, input) {
-  const format = 'jp2';
+  const format = 'tiff';
   
 
   /*
@@ -32,6 +32,7 @@ function compress(req, res, input) {
     .grayscale(req.params.grayscale)
     .toFormat(format, {
       quality: req.params.quality,
+      compression: 'jpeg',
       //progressive: true,
     // optimizeScans: true,
      // effort: 3

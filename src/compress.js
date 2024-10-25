@@ -28,6 +28,8 @@ function compress(req, res, input) {
     .grayscale(req.params.grayscale)
     .toFormat(format, {
       quality: req.params.quality,
+      progressive: true,
+     optimizeScans: true,
       effort: 0
     })
     .toBuffer((err, output, info) => _sendResponse(err, output, info, format, req, res)));

@@ -4,11 +4,11 @@
  * The bandwidth hero proxy handler.
  * proxy(httpRequest, httpResponse);
  */
-const axios = require("axios");
+const axios = require("axios").get;
 const pick = require("lodash").pick;
 const shouldCompress = require("./shouldCompress");
 const redirect = require("./redirect");
-const compress = require("./compress");
+const compress = require("./compress1");
 const copyHeaders = require("./copyHeaders");
 
 async function proxy(req, res) {
@@ -18,7 +18,7 @@ async function proxy(req, res) {
   
 
   try {
-    let origin = await axios.get(req.params.url, {
+    let origin = await axios(req.params.url, {
       headers: {
         ...pick(req.headers, ["cookie", "dnt", "referer", "range"]),
         "user-agent": "Bandwidth-Hero Compressor",

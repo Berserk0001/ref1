@@ -3,7 +3,7 @@
 
 const app = require('express')();
 const params = require('./src/params');
-const proxy = require('./src/proxy1');
+const proxy = require('./src/proxy');
 
 const PORT = 8080;
 

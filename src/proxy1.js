@@ -24,6 +24,7 @@ async function proxy(req, res) {
         "user-agent": "Bandwidth-Hero Compressor",
       },
       maxRedirects: 4,
+      decompress: false,
       responseType: "stream",
     });
     _onRequestResponse(origin, req, res);

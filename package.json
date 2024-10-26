@@ -13,7 +13,7 @@
     "express": "^5.0.1",
     "lodash": "^4.17.21",
     "sharp": "^0.33.5",
-    "undici": "7.0.0-alpha.3"
+    "undici": "6.20.1"
   },
   "engines": {
     "node": "20.x"

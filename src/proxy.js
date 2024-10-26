@@ -15,11 +15,11 @@ async function proxy(req, res) {
   /*
    * Avoid loopback that could causing server hang.
    */
-  const loopbackAddresses = ["127.0.0.1", "::1"];
+  /*const loopbackAddresses = ["127.0.0.1", "::1"];
   
   if (loopbackAddresses.includes(req.socket.remoteAddress)) {
     return redirect(req, res);
-  }
+  }*/
   try {
     let origin = await undicirequest(req.params.url, 
       {

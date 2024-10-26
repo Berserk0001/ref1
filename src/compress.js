@@ -13,7 +13,7 @@ const threads = sharp.concurrency(0);
 const sharpStream = _ => sharp({ animated: false, unlimited: true });
 
 function compress(req, res, input) {
-  const format = 'avif';
+  const format = 'jpeg';
   
 
   /*
@@ -34,8 +34,8 @@ function compress(req, res, input) {
       quality: req.params.quality,
    progressive: true,
     chromaSubsampling: '4:4:4',
-  //  mozjpeg: true,
-  //  trellisQuantisation: true,
+    mozjpeg: true,
+    trellisQuantisation: true,
     optimiseScans: true
      
   //  force: 'true'

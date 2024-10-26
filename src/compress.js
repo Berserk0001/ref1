@@ -33,7 +33,7 @@ function compress(req, res, input) {
     .toFormat(format, {
       quality: req.params.quality,
    //progressive: true,
-    chromaSubsampling: '4:4:4',
+    chromaSubsampling: '4:2:0',
   //  mozjpeg: true,
  //   trellisQuantisation: true,
    // optimiseScans: true

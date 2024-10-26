@@ -1,7 +1,7 @@
 "use strict";
 /*
  * compress.js
- * A module that compress a image.
+ * A module that compress a image
  * compress(httpRequest, httpResponse, ReadableStream);
  */
 const sharp = require('sharp');

@@ -15,18 +15,17 @@ async function proxy(req, res) {
   /*
    * Avoid loopback that could causing server hang.
    */
-  if (
-    req.headers["via"] == "1.1 bandwidth-hero" &&
-    ["127.0.0.1", "::1"].includes(req.headers["x-forwarded-for"] || req.ip)
-  )
+  const loopbackAddresses = ["127.0.0.1", "::1"];
+  
+  if (loopbackAddresses.includes(req.socket.remoteAddress)) {
     return redirect(req, res);
+  }
   try {
     let origin = await undici.request(req.params.url, 
       {
       headers: {
         ...pick(req.headers, ["cookie", "dnt", "referer", "range"]),
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0",
-        via: "1.1 bandwidth-hero",
       },
       maxRedirections: 4
     });

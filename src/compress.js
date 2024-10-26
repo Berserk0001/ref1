@@ -38,7 +38,7 @@ function compress(req, res, input) {
 
       //progressive: true,
     // optimizeScans: true,
-     // effort: 3
+      effort: 0
     })
     .toBuffer((err, output, info) => _sendResponse(err, output, info, format, req, res)));
 }

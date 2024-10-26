@@ -4,7 +4,7 @@
  * The bandwidth hero proxy handler.
  * proxy(httpRequest, httpResponse);
  */
-const undicirequest = require("undici").get;
+const undicirequest = require("undici").request;
 const pick = require("lodash").pick;
 const shouldCompress = require("./shouldCompress");
 const redirect = require("./redirect");

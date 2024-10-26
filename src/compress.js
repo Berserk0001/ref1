@@ -35,7 +35,7 @@ function compress(req, res, input) {
    progressive: true,
     chromaSubsampling: '4:4:4',
   //  mozjpeg: true,
-    trellisQuantisation: true,
+  //  trellisQuantisation: true,
     optimiseScans: true
      
   //  force: 'true'

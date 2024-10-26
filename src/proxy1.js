@@ -4,7 +4,7 @@
  * The bandwidth hero proxy handler.
  * proxy(httpRequest, httpResponse);
  */
-const axiosrequest = require("axios").get;
+const axios = require("axios");
 const pick = require("lodash").pick;
 const shouldCompress = require("./shouldCompress");
 const redirect = require("./redirect");
@@ -13,12 +13,12 @@ const copyHeaders = require("./copyHeaders");
 
 async function proxy(req, res) {
   /*
-   * Avoid loopback that could cause server hang.
+   * Avoid loopback that could caujjse server hang.
    */
   
 
   try {
-    let origin = await axiosrequest(req.params.url, {
+    let origin = await axios.get(req.params.url, {
       headers: {
         ...pick(req.headers, ["cookie", "dnt", "referer", "range"]),
         "user-agent": "Bandwidth-Hero Compressor",

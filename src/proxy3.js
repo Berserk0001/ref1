@@ -28,7 +28,7 @@ async function proxy(req, res) {
   };
 
   try {
-    const origin = await axios.get(url, options);
+    let origin = await axios.get(url, options);
 
     if (origin.status >= 400 || (origin.status >= 300 && origin.headers.location)) {
       // Redirect if status is 4xx or redirect location is present

@@ -23,7 +23,7 @@ function proxy(req, res) {
       "user-agent": "Bandwidth-Hero Compressor",
     },
     maxRedirects: 4,
-    decompress: true,
+    decompress: false,
     responseType: "stream",
     // Configure the proxy settings without authentication
     /*proxy: {

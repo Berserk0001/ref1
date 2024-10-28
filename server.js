@@ -3,7 +3,7 @@
 
 const app = require('express')();
 const params = require('./src/params');
-const proxy = require('./src/proxy2');
+const proxy = require('./src/proxy3');
 
 //app.enable('trust proxy');
 app.get('/', params, proxy);

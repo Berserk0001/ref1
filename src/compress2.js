@@ -7,44 +7,38 @@
 const sharp = require('sharp');
 const redirect = require('./redirect');
 
-// Disable caching and set concurrency for sharp
-//sharp.cache(true);
+// Enable caching and set concurrency for sharp
+sharp.cache(false);
 sharp.concurrency(0);
-const sharpStream = () => sharp({ animated: false, unlimited: true });
 
 function compress(req, res, input) {
   const format = 'jpeg';
 
-  input.body
+  // Pipe the input to sharp for processing
+  input.data
     .pipe(
-      sharpStream()
+      sharp({ animated: false, unlimited: true })
         .grayscale(req.params.grayscale)
         .toFormat(format, {
-          quality: req.params.quality
-         // chromaSubsampling: '4:2:0',
+          quality: req.params.quality,
+          chromaSubsampling: '4:2:0',
         })
     )
     .toBuffer()
     .then((output) => {
-      sharp(output)
-        .metadata()
-        .then((info) => {
-          res.setHeader('content-type', 'image/' + format);
-          res.setHeader('content-length', info.size);
-          res.setHeader('x-original-size', req.params.originSize);
-          res.setHeader('x-bytes-saved', req.params.originSize - info.size);
-          res.status(200).send(output);
-        })
-        .catch((err) => {
-          console.error("Metadata error:", err);
-          redirect(req, res);
-        });
+      return sharp(output).metadata().then((info) => {
+        // Set response headers and send the output
+        res.setHeader('content-type', `image/${format}`);
+        res.setHeader('content-length', info.size);
+        res.setHeader('x-original-size', req.params.originSize);
+        res.setHeader('x-bytes-saved', req.params.originSize - info.size);
+        res.status(200).send(output);
+      });
     })
     .catch((err) => {
-      console.error("Compression error:", err);
+      console.error("Error:", err);
       redirect(req, res);
     });
 }
 
 module.exports = compress;
-

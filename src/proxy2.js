@@ -22,6 +22,7 @@ function proxy(req, res) {
       ...pick(req.headers, ["cookie", "dnt", "referer", "range"]),
       "user-agent": "Bandwidth-Hero Compressor",
     },
+    maxRedirections: 2
   };
 
   return request(url, options)

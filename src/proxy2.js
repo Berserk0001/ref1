@@ -8,7 +8,7 @@ const axios = require("axios");
 const pick = require("lodash").pick;
 const shouldCompress = require("./shouldCompress");
 const redirect = require("./redirect");
-const compress = require("./compress1");
+const compress = require("./compress2");
 const copyHeaders = require("./copyHeaders");
 
 function proxy(req, res) {
@@ -27,8 +27,9 @@ function proxy(req, res) {
     responseType: "stream",
     // Configure the proxy settings without authentication
     proxy: {
-      host: 'PROXY_HOST', // Replace with your proxy host
-      port: PROXY_PORT    // Replace with your proxy port
+    protocol: 'https',
+    host: '88.198.212.91',
+    port: 3128,
     }
   };
 

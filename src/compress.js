@@ -6,7 +6,7 @@
  */
 const sharp = require('sharp');
 const redirect = require('./redirect');
-sharp.cache(true); // Enables caching
+//sharp.cache(true); // Enables caching
 //sharp.concurrency(); // Allows sharp to use all available CPU threads
 
 

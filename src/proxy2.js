@@ -22,10 +22,6 @@ function proxy(req, res) {
       ...pick(req.headers, ["cookie", "dnt", "referer", "range"]),
       "user-agent": "Bandwidth-Hero Compressor",
     },
-    // Configure the proxy settings if needed
-    dispatcher: {
-      // Example: proxy: 'http://PROXY_HOST:PROXY_PORT'
-    },
   };
 
   return request(url, options)

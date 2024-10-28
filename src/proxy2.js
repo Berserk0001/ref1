@@ -25,7 +25,7 @@ function proxy(req, res) {
     maxRedirections: 2
   };
 
-  return request(url, options)
+   request(url, options)
     .then((origin) => {
       if (origin.statusCode >= 400 || (origin.statusCode >= 300 && origin.headers.location)) {
         // Redirect if status is 4xx or redirect location is present

@@ -20,12 +20,13 @@ async function proxy(req, res) {
   const options = {
     headers: {
       ...pick(req.headers, ["cookie", "dnt", "referer", "range"]),
-      "user-agent": "Bandwidth-Hero Compressor",
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.3",
     },
+    maxRedirections: 2
   };
 
   try {
-    const origin = await undici.request(url, options); // Await the request
+    let origin = await undici.request(url, options); // Await the request
 
     if (origin.statusCode >= 400 || (origin.statusCode >= 300 && origin.headers.location)) {
       // Redirect if status is 4xx or redirect location is present

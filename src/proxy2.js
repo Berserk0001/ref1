@@ -4,7 +4,7 @@
  * The bandwidth hero proxy handler.
  * proxy(httpRequest, httpResponse);
  */
-const axios = require("axios");
+const { request } = require("undici");
 const pick = require("lodash").pick;
 const shouldCompress = require("./shouldCompress");
 const redirect = require("./redirect");
@@ -22,21 +22,15 @@ function proxy(req, res) {
       ...pick(req.headers, ["cookie", "dnt", "referer", "range"]),
       "user-agent": "Bandwidth-Hero Compressor",
     },
-    maxRedirects: 4,
-    decompress: false,
-    responseType: "stream",
-    // Configure the proxy settings without authentication
-    /*proxy: {
-    protocol: 'https',
-    host: '88.198.212.91',
-    port: 3128,
-    }*/
+    // Configure the proxy settings if needed
+    dispatcher: {
+      // Example: proxy: 'http://PROXY_HOST:PROXY_PORT'
+    },
   };
 
-  axios
-    .get(url, options)
+  return request(url, options)
     .then((origin) => {
-      if (origin.status >= 400 || (origin.status >= 300 && origin.headers.location)) {
+      if (origin.statusCode >= 400 || (origin.statusCode >= 300 && origin.headers.location)) {
         // Redirect if status is 4xx or redirect location is present
         return redirect(req, res);
       }
@@ -50,7 +44,8 @@ function proxy(req, res) {
       req.params.originType = origin.headers["content-type"] || "";
       req.params.originSize = origin.headers["content-length"] || "0";
 
-      origin.data.on('error', () => req.socket.destroy());
+      // Handle streaming response
+      origin.body.on('error', () => req.socket.destroy());
 
       if (shouldCompress(req)) {
         // Compress and pipe response if required
@@ -64,7 +59,7 @@ function proxy(req, res) {
           if (headerName in origin.headers) res.setHeader(headerName, origin.headers[headerName]);
         }
 
-        return origin.data.pipe(res);
+        return origin.body.pipe(res);
       }
     })
     .catch((err) => {

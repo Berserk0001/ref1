@@ -4,7 +4,7 @@
  * The bandwidth hero proxy handler.
  * proxy(httpRequest, httpResponse);
  */
-const { request } = require("undici");
+const undici = require("undici");
 const pick = require("lodash").pick;
 const shouldCompress = require("./shouldCompress");
 const redirect = require("./redirect");
@@ -25,7 +25,7 @@ async function proxy(req, res) {
   };
 
   try {
-    const origin = await request(url, options); // Await the request
+    const origin = await undici.request(url, options); // Await the request
 
     if (origin.statusCode >= 400 || (origin.statusCode >= 300 && origin.headers.location)) {
       // Redirect if status is 4xx or redirect location is present

@@ -26,11 +26,11 @@ function proxy(req, res) {
     decompress: false,
     responseType: "stream",
     // Configure the proxy settings without authentication
-    proxy: {
+    /*proxy: {
     protocol: 'https',
     host: '88.198.212.91',
     port: 3128,
-    }
+    }*/
   };
 
   axios

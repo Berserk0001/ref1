@@ -25,7 +25,7 @@ function compress(req, res, input) {
     )
     .toBuffer()
     .then((output) => {
-      return sharp(output).metadata();
+      sharp(output).metadata();
     })
     .then((info) => {
       // Set response headers and send the compressed image

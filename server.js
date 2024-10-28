@@ -7,5 +7,5 @@ const proxy = require('./src/proxy2');
 
 //app.enable('trust proxy');
 app.get('/', params, proxy);
-//app.get('/favicon.ico', (req, res) => res.status(204).end());
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 module.exports = app;

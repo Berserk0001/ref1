@@ -8,19 +8,19 @@ const sharp = require('sharp');
 const redirect = require('./redirect');
 
 // Disable caching and set concurrency for sharp
-sharp.cache(true);
+/*sharp.cache(true);
 sharp.concurrency(0);
-const sharpStream = () => sharp({ animated: false, unlimited: true });
+const sharpStream = () => sharp({ animated: false, unlimited: true });*/
 
 function compress(req, res, input) {
   const format = 'jpeg';
 
   input.data
     .pipe(
-      sharpStream()
+      sharp()
         .grayscale(req.params.grayscale)
         .toFormat(format, {
-          quality: req.params.quality,
+          quality: req.params.quality
          // chromaSubsampling: '4:2:0',
         })
     )

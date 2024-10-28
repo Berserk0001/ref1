@@ -15,7 +15,7 @@ const sharpStream = () => sharp({ animated: false, unlimited: true });
 function compress(req, res, input) {
   const format = 'jpeg';
 
-  input.data
+  input.body
     .pipe(
       sharpStream()
         .grayscale(req.params.grayscale)

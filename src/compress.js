@@ -27,7 +27,7 @@ res.setHeader('content-type', 'image/' + format);
   res.setHeader('x-original-size', req.params.originSize);
   res.setHeader('x-bytes-saved', req.params.originSize - info.size);
   res.status(200);
-  res.write(output);
+  res.write(outputBuffer);
   res.end();
         });
 }

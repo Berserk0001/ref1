@@ -1,12 +1,13 @@
 "use strict";
 const sharp = require('sharp');
 const redirect = require('./redirect');
+const sharpStream = _ => sharp({ animated: false, unlimited: true });
 
 function compress(req, res, input) {
     const format = 'jpeg';
 
     // Create a sharp pipeline to process the image
-    const pipeline = sharp()
+    const pipeline = sharpStream()
         .toFormat(format, {
             quality: req.params.quality
         });

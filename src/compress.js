@@ -12,7 +12,8 @@ function compress(req, res, input) {
                 quality: req.params.quality
             })
     ).toBuffer((err, output, info) => {
-        if (err || !info || res.headersSent) return redirect(req, res);
+        if (err || !info) return redirect(req, res);
+        if (res.headersSent) return;
         res.setHeader('content-type', `image/${format}`);
         res.setHeader('content-length', info.size);
         res.setHeader('x-original-size', req.params.originSize);

@@ -7,7 +7,7 @@
   "author": "Anatoliy Yastreb",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "got": "11.8.6",

@@ -25,7 +25,7 @@ async function proxy(req, res) {
     maxRedirects: 2,
     timeout: {
 		request: 10000
-    }
+    },
     isStream: true
   };
 

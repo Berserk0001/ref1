@@ -1,36 +1,49 @@
 "use strict";
-const sharp = require('sharp');
-const redirect = require('./redirect');
-const sharpStream = _ => sharp({ animated: false, unlimited: true });
+/*
+ * compress.js
+ * A module that compress a image.
+ * compress(httpRequest, httpResponse, ReadableStream);
+ */
+const sharp = require('sharp')
+const redirect = require('./redirect')
+
+const sharpStream = _ => sharp({ unlimited: true });
 
 function compress(req, res, input) {
-    const format = 'jpeg';
+  const format = 'jpeg'
 
-    // Create a sharp pipeline to process the image
-    const pipeline = sharpStream()
-        .toFormat(format, {
-            quality: req.params.quality
-        });
+  /*
+   * Determine the uncompressed image size when there's no content-length header.
+   */
 
-    
+  /*
+   * input.pipe => sharp (The compressor) => Send to httpResponse
+   * The following headers:
+   * |  Header Name  |            Description            |           Value            |
+   * |---------------|-----------------------------------|----------------------------|
+   * |x-original-size|Original photo size                |OriginSize                  |
+   * |x-bytes-saved  |Saved bandwidth from original photo|OriginSize - Compressed Size|
+   */
+  input.data.pipe(sharpStream()
+    .grayscale(req.params.grayscale)
+    .toFormat(format, {
+      quality: req.params.quality,
+      progressive: true,
+      optimizeScans: true
+    })
+    .toBuffer((err, output, info) => _sendResponse(err, output, info, format, req, res)))
+}
 
-    // Use the input stream to pipe into the sharp pipeline and convert it to a buffer
-    input.data.pipe(pipeline)
-        .toBuffer((err, outputBuffer, info) => {
-            if (err) {
-                console.error('Buffer conversion error:', err);
-                return redirect(request, reply); // Redirect on error
-            }
+function _sendResponse(err, output, info, format, req, res) {
+  if (err || !info) return redirect(req, res);
 
-            // Set headers based on output info
-res.setHeader('content-type', 'image/' + format);
+  res.setHeader('content-type', 'image/' + format);
   res.setHeader('content-length', info.size);
   res.setHeader('x-original-size', req.params.originSize);
   res.setHeader('x-bytes-saved', req.params.originSize - info.size);
   res.status(200);
-  res.write(outputBuffer);
+  res.write(output);
   res.end();
-        });
 }
 
 module.exports = compress;

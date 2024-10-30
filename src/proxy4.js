@@ -22,45 +22,30 @@ async function proxy(req, res) {
       ...pick(req.headers, ["cookie", "dnt", "referer", "range"]),
       "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.3",
     },
-    timeout: { request: 10000 },        // Timeout of 10 seconds
-    retry: { limit: 2 },                // Retry twice on failure
-    https: { rejectUnauthorized: false }, // Disable SSL verification
-    maxRedirects: 5,
-    decompress: true
+    maxRedirects: 2,
+    responseType: 'json'
   };
 
   try {
-    const origin = got.stream(url, options);
+    let origin = got.stream(url, options);
 
-    origin.on('response', (response) => {
-      // Clean-up Cloudflare headers from the response
-    //  console.log("[CLEAN] Cleaning up CF headers for " + req.path);
-      const cfHeaders = [
-        'cf-cache-status', 'cf-ray', 'cf-request-id', 'date', 'server', 
-        'report-to', 'nel', 'report-policy', 'cf-polished', 'cf-bgj', 
-        'age', 'expires', 'strict-transport-security', 'etag', 
-        'last-modified', 'transfer-encoding'
-      ];
-
-      cfHeaders.forEach(header => {
-        if (response.headers[header]) {
-          delete response.headers[header];
-        }
-      });
-
-      if (response.statusCode >= 400 || (response.statusCode >= 300 && response.headers.location)) {
+    origin.on('response', (originResponse) => {
+      if (originResponse.statusCode >= 400 || (originResponse.statusCode >= 300 && originResponse.headers.location)) {
         // Redirect if status is 4xx or redirect location is present
         return redirect(req, res);
       }
 
-      // Copy cleaned headers to the response
-      copyHeaders(response, res);
+      // Copy headers to response
+      copyHeaders(originResponse, res);
       res.setHeader("content-encoding", "identity");
       res.setHeader("Access-Control-Allow-Origin", "*");
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
       res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
-      req.params.originType = response.headers["content-type"] || "";
-      req.params.originSize = response.headers["content-length"] || "0";
+      req.params.originType = originResponse.headers["content-type"] || "";
+      req.params.originSize = originResponse.headers["content-length"] || "0";
+
+      // Handle streaming response
+      origin.on('error', () => req.socket.destroy());
 
       if (shouldCompress(req)) {
         // Compress and pipe response if required
@@ -71,15 +56,12 @@ async function proxy(req, res) {
 
         // Set specific headers
         for (const headerName of ["accept-ranges", "content-type", "content-length", "content-range"]) {
-          if (headerName in response.headers) res.setHeader(headerName, response.headers[headerName]);
+          if (headerName in originResponse.headers) res.setHeader(headerName, originResponse.headers[headerName]);
         }
 
         return origin.pipe(res);
       }
     });
-
-    origin.on('error', () => req.socket.destroy());
-
   } catch (err) {
     // Handle error directly
     if (err.code === "ERR_INVALID_URL") {
@@ -91,5 +73,5 @@ async function proxy(req, res) {
     console.error(err);
   }
 }
-
+        
 module.exports = proxy;

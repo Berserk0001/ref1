@@ -26,6 +26,7 @@ async function proxy(req, res) {
     retry: { limit: 2 },                // Retry twice on failure
     https: { rejectUnauthorized: false }, // Disable SSL verification
     maxRedirects: 5,
+    decompress: true
   };
 
   try {

@@ -26,7 +26,7 @@ async function proxy(req, res) {
     timeout: {
 		request: 10000
     },
-    isStream: true
+    //isStream: true
   };
 
   try {

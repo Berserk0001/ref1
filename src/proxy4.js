@@ -26,7 +26,6 @@ async function proxy(req, res) {
     retry: { limit: 2 },                // Retry twice on failure
     https: { rejectUnauthorized: false },
     maxRedirects: 2,
-    decompress: true,
 };
   try {
     const origin = got.stream(url, options);

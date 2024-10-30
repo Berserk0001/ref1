@@ -24,6 +24,7 @@ async function proxy(req, res) {
     },
     timeout: { request: 10000 },        // Timeout of 10 seconds to avoid hanging
   retry: { limit: 2 },                // Retry twice on failure
+    https: { rejectUnauthorized: false },
 };
   try {
     const origin = got.stream(url, options);

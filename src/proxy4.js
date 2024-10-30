@@ -33,7 +33,7 @@ async function proxy(req, res) {
 
     origin.on('response', (response) => {
       // Clean-up Cloudflare headers from the response
-      console.log("[CLEAN] Cleaning up CF headers for " + req.path);
+    //  console.log("[CLEAN] Cleaning up CF headers for " + req.path);
       const cfHeaders = [
         'cf-cache-status', 'cf-ray', 'cf-request-id', 'date', 'server', 
         'report-to', 'nel', 'report-policy', 'cf-polished', 'cf-bgj', 

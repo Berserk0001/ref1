@@ -23,8 +23,10 @@ async function proxy(req, res) {
       "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.3",
     },
     timeout: { request: 10000 },        // Timeout of 10 seconds to avoid hanging
-  retry: { limit: 2 },                // Retry twice on failure
+    retry: { limit: 2 },                // Retry twice on failure
     https: { rejectUnauthorized: false },
+    maxRedirects: 2,
+    decompress: true,
 };
   try {
     const origin = got.stream(url, options);

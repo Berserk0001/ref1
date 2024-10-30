@@ -22,13 +22,9 @@ async function proxy(req, res) {
       ...pick(req.headers, ["cookie", "dnt", "referer", "range"]),
       "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.3",
     },
-    maxRedirects: 2,
-    timeout: {
-		request: 10000
-    },
-    //isStream: true
-  };
-
+    timeout: { request: 10000 },        // Timeout of 10 seconds to avoid hanging
+  retry: { limit: 2 },                // Retry twice on failure
+};
   try {
     const origin = got.stream(url, options);
 

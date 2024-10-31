@@ -29,6 +29,11 @@ function proxy(req, res) {
   };
 
   got.stream(url, options)
+    .on('error', (err) => {
+      req.socket.destroy(); // Handle stream errors
+      console.error(err);
+      redirect(req, res); // Redirect on error
+    })
     .then((origin) => {
       if (origin.statusCode >= 400 || (origin.statusCode >= 300 && origin.headers.location)) {
         // Redirect if status is 4xx or redirect location is present
@@ -63,18 +68,12 @@ function proxy(req, res) {
       }
     })
     .catch((err) => {
-      // Handle error directly
-     /* if (err instanceof got.HTTPError) {
-        return res.status(err.response.statusCode).send(err.response.body);
-      }
-
-      if (err.code === "ERR_INVALID_URL") {
-        return res.status(400).send("Invalid URL");
-      }*/
-
-      // Redirect on other errors
-      redirect(req, res);
-     // console.error(err);
+      if (error instanceof RequestError) {
+      console.log(error);
+      return res.status(503).end('request time out', 'ascii');
+    }
+    console.log("some error on " + req.path + "\n", error, '\n');
+    return redirect(req, res);
     });
 }
 

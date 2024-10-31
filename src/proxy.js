@@ -63,17 +63,17 @@ function proxy(req, res) {
     })
     .catch((err) => {
       // Handle error directly
-      if (err instanceof got.HTTPError) {
+     /* if (err instanceof got.HTTPError) {
         return res.status(err.response.statusCode).send(err.response.body);
       }
 
       if (err.code === "ERR_INVALID_URL") {
         return res.status(400).send("Invalid URL");
-      }
+      }*/
 
       // Redirect on other errors
       redirect(req, res);
-      console.error(err);
+     // console.error(err);
     });
 }
 

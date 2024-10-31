@@ -40,7 +40,7 @@ function proxy(req, res) {
         return redirect(req, res);
       }*/
       if (origin.statusCode >= 400 || !origin.headers['content-type'].startsWith('image')) {
-    throw Error(`content-type was ${origin.headers['content-type']} expected content type "image/*" , status code ${origin.statusCode}`)
+    throw Error(`content-typehhhh was ${origin.headers['content-type']} expected content type "image/*" , status code ${origin.statusCode}`)
   };
 
       // Copy headers to response

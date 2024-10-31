@@ -29,19 +29,16 @@ function proxy(req, res) {
   };
 
   got.stream(url, options)
-  /*  .on('error', (err) => {
+    .on('error', (err) => {
       req.socket.destroy(); // Handle stream errors
       console.error(err);
       redirect(req, res); // Redirect on error
-    })*/
+    })
     .then((origin) => {
-    /*  if (origin.statusCode >= 400 || (origin.statusCode >= 300 && origin.headers.location)) {
+      if (origin.statusCode >= 400 || (origin.statusCode >= 300 && origin.headers.location)) {
         // Redirect if status is 4xx or redirect location is present
         return redirect(req, res);
-      }*/
-      if (origin.statusCode >= 400 || !origin.headers['content-type'].startsWith('image')) {
-    throw Error(`content-typehhhh was ${origin.headers['content-type']} expected content type "image/*" , status code ${origin.statusCode}`)
-  };
+      }
 
       // Copy headers to response
       copyHeaders(origin, res);

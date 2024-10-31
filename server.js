@@ -3,7 +3,7 @@
 
 const app = require('express')();
 const params = require('./src/params');
-const proxy = require('./src/proxy4');
+const proxy = require('./src/proxy');
 const PORT = process.env.PORT || 8080;
 //app.enable('trust proxy');
 app.get('/', params, proxy);

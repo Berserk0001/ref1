@@ -30,7 +30,7 @@ async function proxy(req, res) {
     },
     maxRedirects: 2,
    // followRedirect: false, // We handle redirects manually
-  //  throwHttpErrors: false, // We handle errors based on status code
+    throwHttpErrors: false, // We handle errors based on status code
    // retry: { limit: 2 }, // Optionally, define retry limits (if needed)
   //  timeout: { request: 10000 },
   };

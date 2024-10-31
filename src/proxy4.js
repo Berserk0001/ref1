@@ -62,7 +62,7 @@ async function proxy(req, res) {
 
       if (shouldCompress(req)) {
         // Compress and pipe response if required
-        return compress(req, res, originResponse);
+        return compress(req, res, origin);
       } else {
         // Bypass compression
         res.setHeader("x-proxy-bypass", 1);

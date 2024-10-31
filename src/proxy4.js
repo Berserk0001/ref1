@@ -11,6 +11,12 @@ const redirect = require("./redirect");
 const compress = require("./compress");
 const copyHeaders = require("./copyHeaders");
 
+const validateResponse = (res) => {
+  if (res.statusCode >= 400 || !res.headers['content-type'].startsWith('image')) {
+    throw Error(`content-type was ${res.headers['content-type']} expected content type "image/*", status code ${res.statusCode}`);
+  }
+};
+
 async function proxy(req, res) {
   /*
    * Avoid loopback that could cause server hang.
@@ -23,19 +29,20 @@ async function proxy(req, res) {
       "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.3",
     },
     maxRedirects: 2,
-     followRedirect: false, // We handle redirects manually
-      throwHttpErrors: false, // We handle errors based on status code
-      retry: { limit: 2 }, // Optionally, define retry limits (if needed)
-      timeout: { request: 10000 },
-      decompress: true
+   // followRedirect: false, // We handle redirects manually
+  //  throwHttpErrors: false, // We handle errors based on status code
+   // retry: { limit: 2 }, // Optionally, define retry limits (if needed)
+    timeout: { request: 10000 },
   };
 
   try {
     let origin = got.stream(url, options);
 
     origin.on('response', (originResponse) => {
-      if (originResponse.statusCode >= 400 || (originResponse.statusCode >= 300 && originResponse.headers.location)) {
-        // Redirect if status is 4xx or redirect location is present
+      try {
+        validateResponse(originResponse); // Directly validate the response here
+      } catch (err) {
+        console.error(err.message);
         return redirect(req, res);
       }
 
@@ -77,5 +84,5 @@ async function proxy(req, res) {
     console.error(err);
   }
 }
-        
+
 module.exports = proxy;

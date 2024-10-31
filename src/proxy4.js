@@ -13,7 +13,8 @@ const copyHeaders = require("./copyHeaders");
 
 const validateResponse = (res) => {
   if (res.statusCode >= 400 || !res.headers['content-type'].startsWith('image')) {
-    throw Error(`content-type was ${res.headers['content-type']} expected content type "image/*", status code ${res.statusCode}`);
+    //throw Error(`content-type was ${res.headers['content-type']} expected content type "image/*", status code ${res.statusCode}`);
+    redirect(req, res);
   }
 };
 
@@ -39,12 +40,8 @@ async function proxy(req, res) {
     let origin = got.stream(url, options);
 
     origin.on('response', (originResponse) => {
-      try {
+      
         validateResponse(originResponse); // Directly validate the response here
-      } catch (err) {
-        console.error(err.message);
-        return redirect(req, res);
-      }
 
       // Copy headers to response
       copyHeaders(originResponse, res);

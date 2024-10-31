@@ -37,7 +37,7 @@ async function proxy(req, res) {
   };
 
   try {
-    let origin = got.stream(url, options);
+    let origin = await got.stream(url, options);
 
     origin.on('response', (originResponse) => {
       

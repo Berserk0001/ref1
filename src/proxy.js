@@ -22,18 +22,21 @@ function proxy(req, res) {
       ...pick(req.headers, ["cookie", "dnt", "referer", "range"]),
       "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.3",
     },
-    //responseType: 'buffer', // Set to 'buffer' if you need the whole response in memory or stream if you want to stream
     maxRedirects: 2,
-    throwHttpErrors: false,
-    isStream: true // Use isStream to indicate you want a stream
+    responseType: 'stream', // Specify that we want a stream response
   };
 
-  got.stream(url, options)
-    .on('error', (err) => {
-      req.socket.destroy(); // Handle stream errors
-      console.error(err);
-      redirect(req, res); // Redirect on error
-    })
+  // Using got.stream to handle the request as a stream
+  const stream = got.stream(url, options);
+
+  // Handle stream errors by destroying the request socket
+  stream.on('error', (err) => {
+    console.error(err);
+    req.socket.destroy(); // Close the socket connection
+    redirect(req, res); // Redirect on error
+  });
+
+  stream
     .then((origin) => {
       if (origin.statusCode >= 400 || (origin.statusCode >= 300 && origin.headers.location)) {
         // Redirect if status is 4xx or redirect location is present
@@ -50,8 +53,6 @@ function proxy(req, res) {
       req.params.originSize = origin.headers["content-length"] || "0";
 
       // Handle streaming response
-      origin.on('error', () => req.socket.destroy());
-
       if (shouldCompress(req)) {
         // Compress and pipe response if required
         return compress(req, res, origin);
@@ -64,16 +65,23 @@ function proxy(req, res) {
           if (headerName in origin.headers) res.setHeader(headerName, origin.headers[headerName]);
         });
 
-        return origin.pipe(res);
+        // Pipe the stream directly to the response
+        return stream.pipe(res);
       }
     })
-    .catch((error) => {
-      if (error instanceof RequestError) {
-      console.log(error);
-      return res.status(503).end('request time out', 'ascii');
-    }
-    console.log("some error on " + req.path + "\n", error, '\n');
-    return redirect(req, res);
+    .catch((err) => {
+      // Handle error directly
+      if (err instanceof got.HTTPError) {
+        return res.status(err.response.statusCode).send(err.response.body);
+      }
+
+      if (err.code === "ERR_INVALID_URL") {
+        return res.status(400).send("Invalid URL");
+      }
+
+      // Redirect on other errors
+      redirect(req, res);
+      console.error(err);
     });
 }
 

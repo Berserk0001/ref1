@@ -29,16 +29,19 @@ function proxy(req, res) {
   };
 
   got.stream(url, options)
-    .on('error', (err) => {
+  /*  .on('error', (err) => {
       req.socket.destroy(); // Handle stream errors
       console.error(err);
       redirect(req, res); // Redirect on error
-    })
+    })*/
     .then((origin) => {
-      if (origin.statusCode >= 400 || (origin.statusCode >= 300 && origin.headers.location)) {
+    /*  if (origin.statusCode >= 400 || (origin.statusCode >= 300 && origin.headers.location)) {
         // Redirect if status is 4xx or redirect location is present
         return redirect(req, res);
-      }
+      }*/
+      if (origin.statusCode >= 400 || !origin.headers['content-type'].startsWith('image')) {
+    throw Error(`content-type was ${origin.headers['content-type']} expected content type "image/*" , status code ${origin.statusCode}`)
+  };
 
       // Copy headers to response
       copyHeaders(origin, res);
@@ -67,7 +70,7 @@ function proxy(req, res) {
         return origin.pipe(res);
       }
     })
-    .catch((err) => {
+    .catch((error) => {
       if (error instanceof RequestError) {
       console.log(error);
       return res.status(503).end('request time out', 'ascii');

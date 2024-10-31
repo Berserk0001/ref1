@@ -41,7 +41,12 @@ async function proxy(req, res) {
 
     origin.on('response', (originResponse) => {
       
-        validateResponse(originResponse); // Directly validate the response here
+    if (originResponse.statusCode >= 400)
+    return redirect(req, res);
+
+  // handle redirects
+  if (originResponse.statusCode >= 300 && origin.headers.location)
+    return redirect(req, res);
 
       // Copy headers to response
       copyHeaders(originResponse, res);

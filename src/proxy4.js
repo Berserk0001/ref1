@@ -23,7 +23,12 @@ async function proxy(req, res) {
       "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.3",
     },
     maxRedirects: 2,
-    responseType: 'json'
+     followRedirect: false, // We handle redirects manually
+      throwHttpErrors: false, // We handle errors based on status code
+      retry: { limit: 2 }, // Optionally, define retry limits (if needed)
+      timeout: { request: 10000 },
+      http2: true,
+      decompress: true
   };
 
   try {

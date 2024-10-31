@@ -13,8 +13,8 @@ const copyHeaders = require("./copyHeaders");
 
 const validateResponse = (res) => {
   if (res.statusCode >= 400 || !res.headers['content-type'].startsWith('image')) {
-    //throw Error(`content-type was ${res.headers['content-type']} expected content type "image/*", status code ${res.statusCode}`);
-    redirect(req, res);
+    throw Error(`content-type was ${res.headers['content-type']} expected content type "image/*", status code ${res.statusCode}`);
+    //redirect(req, res);
   }
 };
 

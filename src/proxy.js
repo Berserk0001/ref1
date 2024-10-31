@@ -24,7 +24,7 @@ function proxy(req, res) {
     },
     //responseType: 'buffer', // Set to 'buffer' if you need the whole response in memory or stream if you want to stream
     maxRedirects: 2,
-    throwHttpErrors: false,
+  //  throwHttpErrors: false,
     isStream: true // Use isStream to indicate you want a stream
   };
 

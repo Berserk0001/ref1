@@ -45,7 +45,7 @@ async function proxy(req, res) {
     return redirect(req, res);
 
   // handle redirects
-  if (originResponse.statusCode >= 300 && origin.headers.location)
+  if (originResponse.statusCode >= 300 && originResponse.headers.location)
     return redirect(req, res);
 
       // Copy headers to response
